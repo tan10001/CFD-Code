@@ -20,8 +20,11 @@ namespace Finalconduction {
 	/// </summary>
 	public ref class conduction : public System::Windows::Forms::Form
 	{
-	public:int count = 0, cb2 = 0, cb3 = 0, option = -1, number_division = -1, material_index = -1, bc1 = -1, bc2 = -1, bc3 = -1, bc4 = -1, isnonuniform = -1;
+	public:int count = 0, cb2 = 0, cb3 = 0, option = -1, number_division_y = -1, number_division_x = -1, material_index = -1, bc1 = -1, bc2 = -1, bc3 = -1, bc4 = -1, isnonuniform = -1;
 	public:  double nonuniform_coefficient = -1, convergence_criterion = -1, heat_per_volume = -1, Length1 = -1, Length2 = -1, Initial_temp = -1;
+	private: System::Windows::Forms::Label^  label13;
+	private: System::Windows::Forms::TextBox^  textBox8;
+	public:
 	private: System::Windows::Forms::CheckBox^  checkBox1;
 	public:
 		conduction(void)
@@ -109,6 +112,8 @@ namespace Finalconduction {
 			this->comboBox5 = (gcnew System::Windows::Forms::ComboBox());
 			this->button1 = (gcnew System::Windows::Forms::Button());
 			this->checkBox1 = (gcnew System::Windows::Forms::CheckBox());
+			this->label13 = (gcnew System::Windows::Forms::Label());
+			this->textBox8 = (gcnew System::Windows::Forms::TextBox());
 			this->SuspendLayout();
 			// 
 			// label1
@@ -128,18 +133,18 @@ namespace Finalconduction {
 			this->label2->AutoSize = true;
 			this->label2->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 11.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->label2->Location = System::Drawing::Point(107, 47);
+			this->label2->Location = System::Drawing::Point(107, 37);
 			this->label2->Name = L"label2";
-			this->label2->Size = System::Drawing::Size(134, 18);
+			this->label2->Size = System::Drawing::Size(144, 18);
 			this->label2->TabIndex = 1;
-			this->label2->Text = L"Number of Division";
+			this->label2->Text = L"Number of DivisionX";
 			// 
 			// label3
 			// 
 			this->label3->AutoSize = true;
 			this->label3->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 11.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->label3->Location = System::Drawing::Point(107, 75);
+			this->label3->Location = System::Drawing::Point(107, 87);
 			this->label3->Name = L"label3";
 			this->label3->Size = System::Drawing::Size(161, 18);
 			this->label3->TabIndex = 2;
@@ -257,7 +262,7 @@ namespace Finalconduction {
 			// 
 			// textBox1
 			// 
-			this->textBox1->Location = System::Drawing::Point(343, 44);
+			this->textBox1->Location = System::Drawing::Point(343, 35);
 			this->textBox1->Name = L"textBox1";
 			this->textBox1->Size = System::Drawing::Size(100, 20);
 			this->textBox1->TabIndex = 13;
@@ -266,7 +271,7 @@ namespace Finalconduction {
 			// 
 			// textBox2
 			// 
-			this->textBox2->Location = System::Drawing::Point(343, 70);
+			this->textBox2->Location = System::Drawing::Point(343, 85);
 			this->textBox2->Name = L"textBox2";
 			this->textBox2->Size = System::Drawing::Size(100, 20);
 			this->textBox2->TabIndex = 14;
@@ -393,12 +398,35 @@ namespace Finalconduction {
 			this->checkBox1->TabIndex = 25;
 			this->checkBox1->Text = L"non-uniform";
 			this->checkBox1->UseVisualStyleBackColor = true;
+			this->checkBox1->CheckedChanged += gcnew System::EventHandler(this, &conduction::checkBox1_CheckedChanged);
+			// 
+			// label13
+			// 
+			this->label13->AutoSize = true;
+			this->label13->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 11.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->label13->Location = System::Drawing::Point(105, 59);
+			this->label13->Name = L"label13";
+			this->label13->Size = System::Drawing::Size(143, 18);
+			this->label13->TabIndex = 26;
+			this->label13->Text = L"Number of DIvisionY";
+			// 
+			// textBox8
+			// 
+			this->textBox8->Location = System::Drawing::Point(343, 59);
+			this->textBox8->Name = L"textBox8";
+			this->textBox8->Size = System::Drawing::Size(100, 20);
+			this->textBox8->TabIndex = 27;
+			this->textBox8->TextChanged += gcnew System::EventHandler(this, &conduction::textBox8_TextChanged);
+			this->textBox8->KeyPress += gcnew System::Windows::Forms::KeyPressEventHandler(this, &conduction::textBox8_KeyPress);
 			// 
 			// conduction
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(529, 400);
+			this->ClientSize = System::Drawing::Size(572, 437);
+			this->Controls->Add(this->textBox8);
+			this->Controls->Add(this->label13);
 			this->Controls->Add(this->checkBox1);
 			this->Controls->Add(this->button1);
 			this->Controls->Add(this->comboBox5);
@@ -470,7 +498,7 @@ namespace Finalconduction {
 		{
 			if (textBox1->Text != "-")
 			{
-				number_division = Int32::Parse(textBox1->Text);
+				number_division_x = Int32::Parse(textBox1->Text);
 			}
 
 		}
@@ -497,7 +525,7 @@ namespace Finalconduction {
 			{
 				if (textBox2->Text != "-")
 				{
-					nonuniform_coefficient = Int32::Parse(textBox2->Text);
+					nonuniform_coefficient = Double::Parse(textBox2->Text);
 				}
 
 			}
@@ -663,48 +691,59 @@ namespace Finalconduction {
 	}
 	private: System::Void button1_Click(System::Object^  sender, System::EventArgs^  e) {
 
-		ofstream outfile;
-
-		//outfile.open("User_Input.txt", ios::trunc | ios::out);//delete at end
-		outfile.open("User_Input.txt", ios::trunc | ios::out);
-		outfile << "-1" << '\n';
-		outfile << material_index << '\n';
-		outfile << number_division << '\n';
-		if (isnonuniform == 1)
+		if (material_index != -1 && number_division_x != -1 && number_division_y != -1 && bc1 != -1 && bc2 != -1 && bc3 != -1 && bc4 != -1 && convergence_criterion != -1 && heat_per_volume != -1 && Length1 != -1 && Length2 != -1 && Initial_temp != -1)
 		{
-			outfile << nonuniform_coefficient << '\n';
+
+			ofstream outfile;
+
+			//outfile.open("User_Input.txt", ios::trunc | ios::out);//delete at end
+			outfile.open("User_Input.txt", ios::trunc | ios::out);
+			outfile << "-1" << '\n';
+			outfile << material_index << '\n';
+			outfile << number_division_x << '\n';
+			outfile << number_division_y << '\n';
+			if (isnonuniform == 1)
+			{
+				outfile << nonuniform_coefficient << '\n';
+
+			}
+
+			else
+			{
+				outfile << -1 << '\n';
+			}
+			outfile << bc1 << '\n';
+			outfile << bc2 << '\n';
+			outfile << bc3 << '\n';
+			outfile << bc4 << '\n';
+			outfile << convergence_criterion << '\n';
+			outfile << heat_per_volume << '\n';
+			outfile << Length1 << '\n';
+			outfile << Length2 << '\n';
+			outfile << Initial_temp << '\n';
+
+
+
+
+
+			outfile.close();
+
+
+
+
+
+			this->Hide();
+
+
+			Conduction_Inputs^ f3 = gcnew Conduction_Inputs();
+			f3->ShowDialog();
 
 		}
 
 		else
 		{
-			outfile << -1 << '\n';
+			MessageBox::Show("Please enter all the inputs");
 		}
-		outfile << bc1 << '\n';
-		outfile << bc2 << '\n';
-		outfile << bc3 << '\n';
-		outfile << bc4 << '\n';
-		outfile << convergence_criterion << '\n';
-		outfile << heat_per_volume << '\n';
-		outfile << Length1 << '\n';
-		outfile << Length2 << '\n';
-		outfile << Initial_temp << '\n';
-
-
-
-
-
-		outfile.close();
-
-
-
-
-
-		this->Hide();
-
-
-		Conduction_Inputs^ f3 = gcnew Conduction_Inputs();
-		f3->ShowDialog();
 	}
 	private: System::Void textBox1_KeyPress(System::Object^  sender, System::Windows::Forms::KeyPressEventArgs^  e) {
 
@@ -819,5 +858,36 @@ namespace Finalconduction {
 
 		e->Handled = true;
 	}
-	};
+	private: System::Void textBox8_TextChanged(System::Object^  sender, System::EventArgs^  e) {
+
+
+		if (this->textBox8->Text->Length != 0)
+		{
+			if (textBox8->Text != "-")
+			{
+				number_division_y = Int32::Parse(textBox8->Text);
+			}
+
+		}
+
+
+	}
+private: System::Void checkBox1_CheckedChanged(System::Object^  sender, System::EventArgs^  e) {
+
+	count++;
+}
+private: System::Void textBox8_KeyPress(System::Object^  sender, System::Windows::Forms::KeyPressEventArgs^  e) {
+
+
+	if (e->KeyChar == '.') {
+		if (this->textBox8->Text->Contains(".") && !this->textBox8->SelectedText->Contains("."))
+			e->Handled = true;
+	}
+
+	// Accept only digits ".", "-" and the Backspace character
+	else if (!Char::IsDigit(e->KeyChar) && e->KeyChar != 0x08) {
+		e->Handled = true;
+	}
+}
+};
 }
