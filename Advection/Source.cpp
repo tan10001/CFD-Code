@@ -1,3 +1,5 @@
+
+
 #include <iostream>
 #include <fstream>
 #include <math.h>
@@ -24,7 +26,7 @@ void advection_2d_uniform_all_schemes()  //change w1,w2,w3 for diff schemes
 	//change to N parameter
 	double u = 1, v = 1;
 	double epsilon_st = 0.08;
-	double mx = rho*u; double my = rho*v;//check
+	double mx = rho*u; double my = rho*v;
 
 										 //double L1 = 1, L2 = 1;
 	double T0 = 300;
@@ -67,13 +69,13 @@ void advection_2d_uniform_all_schemes()  //change w1,w2,w3 for diff schemes
 	for (i = 0; i < imax; i++) // south side
 		T[0][i] = W2;
 
-	for (j = 0; j < jmax; j++) // east side 
+	for (j = 0; j < jmax; j++) // east side
 	T[j][imax -1] = W3;
 
-	for (i = 0; i < imax; i++)  //north side 
+	for (i = 0; i < imax; i++)  //north side
 		T[jmax -1][i] = W4;
-	
-	
+
+
 
 
 
@@ -81,7 +83,7 @@ void advection_2d_uniform_all_schemes()  //change w1,w2,w3 for diff schemes
 	// Coordinates of face centers
 	double *x = new double[imax];
 	x[0] = 0;
-	double C1 = (L1 / (imax - 2));
+	double C1 = (L1 / (imax - 2));   /// ask why imax - 2
 	for (i = 1; i < imax - 1; i++)
 		x[i] = C1*i;
 	double *y = new double[jmax];
@@ -149,7 +151,7 @@ void advection_2d_uniform_all_schemes()  //change w1,w2,w3 for diff schemes
 
 
 		// STEP4: 4. Computation of conduction-flux and temperature
-		for (j = 1; j < jmax - 1; j++)  // enthalpy flux in xdirn 
+		for (j = 1; j < jmax - 1; j++)  // enthalpy flux in xdirn
 		{
 			for (i = 0; i < imax - 1; i++)
 			{
@@ -173,7 +175,7 @@ void advection_2d_uniform_all_schemes()  //change w1,w2,w3 for diff schemes
 			{
 				if (j == 0 || j == jmax - 2)
 				{
-					hy[j][i] = max(0, mx)*T[j][i] * cp + min(0, mx)*T[j + 1][i] * cp;
+					hy[j][i] = max(0, mx)*T[j][i] * cp + min(0, mx)*T[j][i + 1] * cp;
 				}
 				else
 				{
@@ -190,7 +192,7 @@ void advection_2d_uniform_all_schemes()  //change w1,w2,w3 for diff schemes
 			for (j = 1; j < jmax - 1; j++)
 			{
 
-				H_advec[j][i] = (hx[j][i] - hx[j][i - 1])*Dy + (hy[j][i] - hy[j - 1][i])*Dx;   //calc Hadevection       
+				H_advec[j][i] = (hx[j][i] - hx[j][i - 1])*Dy + (hy[j][i] - hy[j - 1][i])*Dx;   //calc Hadevection
 				T[j][i] = T_old[j][i] - (Dt / (rho*cp*Dx*Dy))*H_advec[j][i]; // calcultating new temps
 
 			}
@@ -200,7 +202,7 @@ void advection_2d_uniform_all_schemes()  //change w1,w2,w3 for diff schemes
 
 
 
-		for (j = 0; j < jmax; j++) // loop to update old temps 
+		for (j = 0; j < jmax; j++) // loop to update old temps
 		{
 			for (i = 0; i < imax; i++)
 			{
@@ -209,8 +211,10 @@ void advection_2d_uniform_all_schemes()  //change w1,w2,w3 for diff schemes
 		}
 
 
-		/*double z = 0;
+		*double z = 0;
+		// finding rms for stability criterion
 
+       /*
 		for (int i = 1; i < imax - 1; i++)
 		{
 			for (int j = 1; j < jmax - 1; j++)
@@ -219,8 +223,8 @@ void advection_2d_uniform_all_schemes()  //change w1,w2,w3 for diff schemes
 
 			}
 		}
-		unsteadiness_nd = sqrt(z / ((imax - 2)*(jmax - 2)));//steady state stability criterion
-		*/
+	       unsteadiness_nd = sqrt(z / ((imax - 2)*(jmax - 2)));//steady state stability criterion
+*/
 		double min = T[0][0], max = T[0][0];
 
 		for (j = 0; j < jmax; j++)
@@ -553,6 +557,13 @@ void advection_2d_nonuniform(double Beta) //all parameters later passed through 
 				}
 				else  //CD scheme
 				{
+				    w_plus1x = Dx[i-1]/(Dx[i-1]+Dx[i+1]);
+				    w_plus2x = Dx[i+1]/(Dx[i-1]+ Dx[i+1]);
+				    w_plus3x = w_minus3x = 0;
+				    w_minus1x = w_plus2x;
+				    w_minus2x = w_plus1s;
+
+
 
 
 
@@ -592,10 +603,10 @@ void advection_2d_nonuniform(double Beta) //all parameters later passed through 
 					w_minus2x = (2 * Dx[i + 1] + Dx[i + 2]) / (Dx[i + 1] + Dx[i + 2]);
 					w_plus3x = -Dx[i] / (Dx[i] + Dx[i - 1]);
 					w_minus3x = -Dx[i + 1] / (Dx[i + 1] + Dx[i + 2]);
-					w_plus2y = (2 * Dy[i] + Dy[i - 1]) / (Dy[i] + Dy[i - 1]);
-					w_minus2x = (2 * Dy[i + 1] + Dy[i + 2]) / (Dy[i + 1] + Dy[i + 2]);
-					w_plus3y = -Dy[i] / (Dy[i] + Dy[i - 1]);
-					w_minus3y = -Dy[i + 1] / (Dy[i + 1] + Dy[i + 2]);
+					w_plus2y = (2 * Dy[j] + Dy[j - 1]) / (Dy[j] + Dy[j - 1]);
+					w_minus2y = (2 * Dy[j + 1] + Dy[j + 2]) / (Dy[j + 1] + Dy[j + 2]);
+					w_plus3y = -Dy[j] / (Dy[j] + Dy[j - 1]);
+					w_minus3y = -Dy[j + 1] / (Dy[j + 1] + Dy[j + 2]);
 
 
 
@@ -609,10 +620,12 @@ void advection_2d_nonuniform(double Beta) //all parameters later passed through 
 					w_minus2x = Dx[i] * (2 * Dx[i + 1] + Dx[i + 2]) / ((Dx[i] + Dx[i + 1])*(Dx[i] + Dx[i + 2]));
 					w_plus3x = -(Dx[i] * Dx[i + 1]) / ((Dx[i] + Dx[i - 1])*(Dx[i] + 2 * Dx[i + 1] + Dx[i - 1]));
 					w_minus3x = -(Dx[i] * Dx[i + 1]) / ((Dx[i + 1] + Dx[i + 2])*(Dx[i] + 2 * Dx[i + 1] + Dx[i + 2]));
-					w_plus1y = Dy[i] * (2 * Dy[i] + Dy[i - 1]) / ((Dy[i] + Dy[i + 1])*(Dy[i + 1] + 2 * Dy[i] + Dy[i - 1]));
-					w_minus1y = Dy[i + 1] * (2 * Dy[i + 1] + Dy[i + 2]) / ((Dy[i] + Dy[i + 1])*(Dy[i] + 2 * Dy[i + 1] + Dy[i + 2]));
-					w_plus2y = Dy[i + 1] * (2 * Dy[i] + Dy[i - 1]) / ((Dy[i] + Dy[i + 1])*(Dy[i + 1] + Dy[i - 1]));
-					w_minus2y = Dy[i] * (2 * Dy[i + 1] + Dy[i + 2]) / ((Dy[i] + Dy[i + 1])*(Dy[i] + Dy[i + 2]));
+					w_plus1y = Dy[j] * (2 * Dy[j] + Dy[j - 1]) / ((Dy[j] + Dy[j + 1])*(Dy[j + 1] + 2 * Dy[j] + Dy[j - 1]));
+					w_minus1y = Dy[j + 1] * (2 * Dy[j + 1] + Dy[i + 2]) / ((Dy[i] + Dy[i + 1])*(Dy[i] + 2 * Dy[j + 1] + Dy[j + 2]));
+					w_plus2y = Dy[j + 1] * (2 * Dy[j] + Dy[j - 1]) / ((Dy[j] + Dy[j + 1])*(Dy[i + 1] + Dy[j - 1]));
+					w_minus2y = Dy[j] * (2 * Dy[j + 1] + Dy[j + 2]) / ((Dy[j] + Dy[j + 1])*(Dy[j] + Dy[j + 2]));
+					w_plus3y = -(Dy[j]*Dy[j+1])/((Dy[j] + Dy[j-1])*(Dy[j]+ 2*Dy[j+1] + Dy[j-1]));
+					w_minus3y = -(Dy[j]*Dy[j+1])/((Dy[j+1]+ Dy[j+2])*(Dy[j] + 2*Dy[j+1] + Dy[j+2]));
 
 
 
@@ -620,6 +633,17 @@ void advection_2d_nonuniform(double Beta) //all parameters later passed through 
 				}
 				else  //CD scheme
 				{
+				      w_plus1x = Dx[i-1]/(Dx[i-1]+Dx[i+1]);
+				    w_plus2x = Dx[i+1]/(Dx[i-1]+ Dx[i+1]);
+				    w_plus3x = w_minus3x = 0;
+				    w_minus1x = w_plus2x;
+				    w_minus2x = w_plus1s;
+				    w_plus1y =  Dy[j-1]/(Dy[j-1]+Dy[j+1]);
+				    w_plus2y =  Dy[j+1]/(Dy[j-1]+ Dy[j+1]);
+				    w_plus3y = w_minus3y = 0;
+				    w_minus1y = w_plus1y;
+				    w_minus2y = w_plus2y;
+
 
 
 
@@ -706,9 +730,12 @@ void advection_2d_nonuniform(double Beta) //all parameters later passed through 
 int main()
 
 {
-	
+
 	advection_2d_uniform_all_schemes();
 	advection_2d_nonuniform(1.2);
 	return 0;
 
 }
+advection.cpp
+Open with
+Displaying advection.cpp.
