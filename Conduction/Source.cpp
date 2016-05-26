@@ -13,15 +13,15 @@ using namespace std;
 
 
 
-void CONDUCTION_1D_UNIFORM_GRID(double T0 , double Q_vol_gen , int c1 ,int c2 , int c3 , int c4 , int N ,  double L , double W1 , double W2 , double W3 , double W4 , double T_inf , double epsilon_st)
+void CONDUCTION_1D_UNIFORM_GRID(double rho ,double cp,double k,double T0 , double Q_vol_gen , int c1 ,int c2 , int c3 , int c4 , int N ,  double L , double W1 , double W2 , double W3 , double W4 , double T_inf1 , double T_inf2 , double epsilon_st)
 {
 
 
 
 	//STEP-1: User-Input
-	double rho = 7750;
-	double cp = 500;
-	double k=16.2;
+	//double rho = 7750;
+	//double cp = 500;
+	//double k=16.2;
 	int imax = N;
 
 	/*
@@ -47,11 +47,11 @@ void CONDUCTION_1D_UNIFORM_GRID(double T0 , double Q_vol_gen , int c1 ,int c2 , 
 	{
 	case 1:T[0] = W1; 
 		break;
-	case 2:T[0] = (0.5*W1*Dx/k)+T[1];
+	case 3:T[0] = (0.5*W1*Dx/k)+T[1];
 		break;
-	case 3:T[0] = T[1];
+	case 0:T[0] = T[1];
 		break;
-	case 4:T[0] = ((2 * k*T[1]) + (W1*Dx*T_inf)) / (2 * k + W1*Dx);
+	case 2:T[0] = ((2 * k*T[1]) + (W1*Dx*T_inf1)) / (2 * k + W1*Dx);
 		break;
 	}
 
@@ -59,11 +59,11 @@ void CONDUCTION_1D_UNIFORM_GRID(double T0 , double Q_vol_gen , int c1 ,int c2 , 
 	{
 	case 1:T[imax-1] = W2;
 		break;
-	case 2:T[imax - 1] = (0.5*W2*Dx / k) + T[imax-2];
+	case 3:T[imax - 1] = (0.5*W2*Dx / k) + T[imax-2];
 		break;
-	case 3:T[imax - 1] = T[imax - 2];
+	case 0:T[imax - 1] = T[imax - 2];
 		break;
-	case 4:T[imax - 1] = ((2 * k*T[imax - 2]) + (W2*Dx*T_inf)) / (2 * k + W2*Dx);
+	case 2:T[imax - 1] = ((2 * k*T[imax - 2]) + (W2*Dx*T_inf2)) / (2 * k + W2*Dx);
 		break;
 	}
 
@@ -125,11 +125,11 @@ void CONDUCTION_1D_UNIFORM_GRID(double T0 , double Q_vol_gen , int c1 ,int c2 , 
 		{
 		case 1:T[0] = W1;
 			break;
-		case 2:T[0] = (0.5*W1*Dx / k) + T[1];
+		case 3:T[0] = (0.5*W1*Dx / k) + T[1];
 			break;
-		case 3:T[0] = T[1];
+		case 0:T[0] = T[1];
 			break;
-		case 4:T[0] = ((2 * k*T[1]) + (W1*Dx*T_inf)) / (2 * k + W1*Dx);
+		case 2:T[0] = ((2 * k*T[1]) + (W1*Dx*T_inf1)) / (2 * k + W1*Dx);
 			break;
 		}
 
@@ -137,11 +137,11 @@ void CONDUCTION_1D_UNIFORM_GRID(double T0 , double Q_vol_gen , int c1 ,int c2 , 
 		{
 		case 1:T[imax - 1] = W2;
 			break;
-		case 2:T[imax - 1] = (0.5*W2*Dx / k) + T[imax - 2];
+		case 3:T[imax - 1] = (0.5*W2*Dx / k) + T[imax - 2];
 			break;
-		case 3:T[imax - 1] = T[imax - 2];
+		case 0:T[imax - 1] = T[imax - 2];
 			break;
-		case 4:T[imax - 1] = ((2 * k*T[imax - 2]) + (W2*Dx*T_inf)) / (2 * k + W2*Dx);
+		case 2:T[imax - 1] = ((2 * k*T[imax - 2]) + (W2*Dx*T_inf2)) / (2 * k + W2*Dx);
 			break;
 		}
 
@@ -185,7 +185,7 @@ void CONDUCTION_1D_UNIFORM_GRID(double T0 , double Q_vol_gen , int c1 ,int c2 , 
 	ZeroMemory(&pi, sizeof(pi));
 	CreateProcess
 	(
-		TEXT("C:\\Users\\Ankush\\Documents\\Visual Studio 2015\\Projects\\Conduction\\Conduction\\MESH.exe"),
+		TEXT("MESH.exe"),
 		NULL, NULL, NULL, FALSE,
 		CREATE_NO_WINDOW,
 		NULL, NULL,
@@ -194,7 +194,7 @@ void CONDUCTION_1D_UNIFORM_GRID(double T0 , double Q_vol_gen , int c1 ,int c2 , 
 	);
 	CreateProcess
 	(
-		TEXT("C:\\Users\\Ankush\\Documents\\Visual Studio 2015\\Projects\\Conduction\\Debug\\LinePlot.exe"),
+		TEXT("LinePlot.exe"),
 		NULL, NULL, NULL, FALSE,
 		CREATE_NO_WINDOW,
 		NULL, NULL,
@@ -202,7 +202,7 @@ void CONDUCTION_1D_UNIFORM_GRID(double T0 , double Q_vol_gen , int c1 ,int c2 , 
 		&pi
 	);
 	
-	cin >> i;
+	
 
 }
 
@@ -211,18 +211,17 @@ void CONDUCTION_1D_UNIFORM_GRID(double T0 , double Q_vol_gen , int c1 ,int c2 , 
 
 
 
-void CONDUCTION_1D_NONUNIFORM_GRID(double T0, double Q_vol_gen, int c1, int c2, int c3, int c4, int N,  double L, double W1, double W2, double W3, double W4, double T_inf, double epsilon_st , double Beta)
+void CONDUCTION_1D_NONUNIFORM_GRID(double rho, double cp, double k, double T0, double Q_vol_gen, int c1, int c2, int c3, int c4, int N,  double L, double W1, double W2, double W3, double W4, double T_inf1,double T_inf2, double epsilon_st , double Beta)
 {
 
 
 
 	//STEP-1: User-Input
-	double rho = 7750;
-	double cp = 500;
-	double k = 16.2;
+	//double rho = 7750;
+	//double cp = 500;
+	//double k = 16.2;
 	int imax = N;
-	int i = 0;
-
+	int i = 0;cin >> i;
 	double *xi = new double[imax - 1];
 	xi[0] = 0;
 	double C1 = (L / (imax - 2));
@@ -332,11 +331,11 @@ void CONDUCTION_1D_NONUNIFORM_GRID(double T0, double Q_vol_gen, int c1, int c2, 
 		{
 		case 1:T[0] = W1;
 			break;
-		case 2:T[0] = (W1*dx[0] / k) + T[1];
+		case 3:T[0] = (W1*dx[0] / k) + T[1];
 			break;
-		case 3:T[0] = T[1];
+		case 0:T[0] = T[1];
 			break;
-		case 4:T[0] = (( k*T[1]) + (W1*dx[0] * T_inf)) / ( k + W1*dx[0]);
+		case 2:T[0] = (( k*T[1]) + (W1*dx[0] * T_inf1)) / ( k + W1*dx[0]);
 			break;
 		}
 
@@ -344,11 +343,11 @@ void CONDUCTION_1D_NONUNIFORM_GRID(double T0, double Q_vol_gen, int c1, int c2, 
 		{
 		case 1:T[imax - 1] = W2;
 			break;
-		case 2:T[imax - 1] = (W2*dx[imax - 2] / k) + T[imax - 2];
+		case 3:T[imax - 1] = (W2*dx[imax - 2] / k) + T[imax - 2];
 			break;
-		case 3:T[imax - 1] = T[imax - 2];
+		case 0:T[imax - 1] = T[imax - 2];
 			break;
-		case 4:T[imax - 1] = (( k*T[imax - 2]) + (W2*dx[imax - 2] * T_inf)) / ( k + W2*dx[imax - 2]);
+		case 2:T[imax - 1] = (( k*T[imax - 2]) + (W2*dx[imax - 2] * T_inf2)) / ( k + W2*dx[imax - 2]);
 			break;
 		}
 
@@ -429,7 +428,7 @@ void CONDUCTION_1D_NONUNIFORM_GRID(double T0, double Q_vol_gen, int c1, int c2, 
 	ZeroMemory(&pi, sizeof(pi));
 	CreateProcess
 	(
-		TEXT("C:\\Users\\Ankush\\Documents\\Visual Studio 2015\\Projects\\Conduction\\Conduction\\MESH.exe"),
+		TEXT("MESH.exe"),
 		NULL, NULL, NULL, FALSE,
 		CREATE_NO_WINDOW,
 		NULL, NULL,
@@ -438,7 +437,7 @@ void CONDUCTION_1D_NONUNIFORM_GRID(double T0, double Q_vol_gen, int c1, int c2, 
 	);
 	CreateProcess
 	(
-		TEXT("C:\\Users\\Ankush\\Documents\\Visual Studio 2015\\Projects\\Conduction\\Debug\\LinePlot.exe"),
+		TEXT("LinePlot.exe"),
 		NULL, NULL, NULL, FALSE,
 		CREATE_NO_WINDOW,
 		NULL, NULL,
@@ -446,20 +445,20 @@ void CONDUCTION_1D_NONUNIFORM_GRID(double T0, double Q_vol_gen, int c1, int c2, 
 		&pi
 	);
 	
-	cin >> i;
+	
 
 }
 
 
-void CONDUCTION_2D_UNIFORM_GRID(double T0, double Q_vol_gen, int c1, int c2, int c3, int c4, int N1,int N2, double L1,double L2 , double W1, double W2, double W3, double W4, double T_inf, double epsilon_st)
+void CONDUCTION_2D_UNIFORM_GRID(double rho, double cp, double k, double T0, double Q_vol_gen, int c1, int c2, int c3, int c4, int N1,int N2, double L1,double L2 , double W1, double W2, double W3, double W4, double T_inf1, double T_inf2, double T_inf3, double T_inf4, double epsilon_st)
 {
 
 
 
 	//STEP-1: User-Input
-	double rho = 7750;
-	double cp = 500;
-	double k = 16.2;
+	//double rho = 7750;
+	//double cp = 500;
+	//double k = 16.2;
 	int imax = N1, jmax = N2;
 
 	/*
@@ -490,14 +489,14 @@ void CONDUCTION_2D_UNIFORM_GRID(double T0, double Q_vol_gen, int c1, int c2, int
 	case 1:for(j=0;j<jmax;j++)
 		T[j][0] = W1;
 		break;
-	case 2:for (j = 0; j<jmax; j++)
+	case 3:for (j = 0; j<jmax; j++)
 		T[j][0] = (0.5*W1*Dx / k) + T[j][1];
 		break;
-	case 3:for (j = 0; j<jmax; j++)
+	case 0:for (j = 0; j<jmax; j++)
 		T[j][0] = T[j][1];
 		break;
-	case 4:for (j = 0; j<jmax; j++)
-		T[j][0] = ((2 * k*T[j][1]) + (W1*Dx*T_inf)) / (2 * k + W1*Dx);
+	case 2:for (j = 0; j<jmax; j++)
+		T[j][0] = ((2 * k*T[j][1]) + (W1*Dx*T_inf1)) / (2 * k + W1*Dx);
 		break;
 	}
 
@@ -506,14 +505,14 @@ void CONDUCTION_2D_UNIFORM_GRID(double T0, double Q_vol_gen, int c1, int c2, int
 	case 1:for (j = 0; j<jmax; j++)
 		T[j][imax - 1] = W2;
 		break;
-	case 2:for (j = 0; j<jmax; j++)
+	case 3:for (j = 0; j<jmax; j++)
 		T[j][imax - 1] = (0.5*W2*Dx / k) + T[j][imax - 2];
 		break;
-	case 3:for (j = 0; j<jmax; j++)
+	case 0:for (j = 0; j<jmax; j++)
 		T[j][imax - 1] = T[j][imax - 2];
 		break;
-	case 4:for (j = 0; j<jmax; j++)
-		T[j][imax - 1] = ((2 * k*T[j][imax - 2]) + (W2*Dx*T_inf)) / (2 * k + W2*Dx);
+	case 2:for (j = 0; j<jmax; j++)
+		T[j][imax - 1] = ((2 * k*T[j][imax - 2]) + (W2*Dx*T_inf2)) / (2 * k + W2*Dx);
 		break;
 	}
 
@@ -522,14 +521,14 @@ void CONDUCTION_2D_UNIFORM_GRID(double T0, double Q_vol_gen, int c1, int c2, int
 	case 1:for (i = 0; i<imax; i++)
 		T[jmax-1][i] = W3;
 		break;
-	case 2:for (i = 0; i<imax; i++)
+	case 3:for (i = 0; i<imax; i++)
 		T[jmax-1][i] = (0.5*W3*Dy / k) + T[jmax-2][i];
 		break;
-	case 3:for (i = 0; i<imax; i++)
+	case 0:for (i = 0; i<imax; i++)
 		T[jmax-1][i] = T[jmax-2][i];
 		break;
-	case 4:for (i = 0; i<imax; i++)
-		T[jmax-1][i] = ((2 * k*T[jmax-2][i]) + (W3*Dy*T_inf)) / (2 * k + W3*Dy);
+	case 2:for (i = 0; i<imax; i++)
+		T[jmax-1][i] = ((2 * k*T[jmax-2][i]) + (W3*Dy*T_inf3)) / (2 * k + W3*Dy);
 		break;
 	}
 
@@ -538,14 +537,14 @@ void CONDUCTION_2D_UNIFORM_GRID(double T0, double Q_vol_gen, int c1, int c2, int
 	case 1:for (i = 0; i<imax; i++)
 		T[0][i] = W4;
 		break;
-	case 2:for (i = 0; i<imax; i++)
+	case 3:for (i = 0; i<imax; i++)
 		T[0][i] = (0.5*W4*Dy / k) + T[1][i];
 		break;
-	case 3:for (i = 0; i<imax; i++)
+	case 0:for (i = 0; i<imax; i++)
 		T[0][i] = T[1][i];
 		break;
-	case 4:for (i = 0; i<imax; i++)
-		T[0][i] = ((2 * k*T[1][i]) + (W4*Dy*T_inf)) / (2 * k + W4*Dy);
+	case 2:for (i = 0; i<imax; i++)
+		T[0][i] = ((2 * k*T[1][i]) + (W4*Dy*T_inf4)) / (2 * k + W4*Dy);
 		break;
 	}
 	// Coordinates of face centers
@@ -656,14 +655,14 @@ void CONDUCTION_2D_UNIFORM_GRID(double T0, double Q_vol_gen, int c1, int c2, int
 		case 1:for (j = 0; j<jmax; j++)
 			T[j][0] = W1;
 			break;
-		case 2:for (j = 0; j<jmax; j++)
+		case 3:for (j = 0; j<jmax; j++)
 			T[j][0] = (0.5*W1*Dx / k) + T[j][1];
 			break;
-		case 3:for (j = 0; j<jmax; j++)
+		case 0:for (j = 0; j<jmax; j++)
 			T[j][0] = T[j][1];
 			break;
-		case 4:for (j = 0; j<jmax; j++)
-			T[j][0] = ((2 * k*T[j][1]) + (W1*Dx*T_inf)) / (2 * k + W1*Dx);
+		case 2:for (j = 0; j<jmax; j++)
+			T[j][0] = ((2 * k*T[j][1]) + (W1*Dx*T_inf1)) / (2 * k + W1*Dx);
 			break;
 		}
 
@@ -672,14 +671,14 @@ void CONDUCTION_2D_UNIFORM_GRID(double T0, double Q_vol_gen, int c1, int c2, int
 		case 1:for (j = 0; j<jmax; j++)
 			T[j][imax - 1] = W2;
 			break;
-		case 2:for (j = 0; j<jmax; j++)
+		case 3:for (j = 0; j<jmax; j++)
 			T[j][imax - 1] = (0.5*W2*Dx / k) + T[j][imax - 2];
 			break;
-		case 3:for (j = 0; j<jmax; j++)
+		case 0:for (j = 0; j<jmax; j++)
 			T[j][imax - 1] = T[j][imax - 2];
 			break;
-		case 4:for (j = 0; j<jmax; j++)
-			T[j][imax - 1] = ((2 * k*T[j][imax - 2]) + (W2*Dx*T_inf)) / (2 * k + W2*Dx);
+		case 2:for (j = 0; j<jmax; j++)
+			T[j][imax - 1] = ((2 * k*T[j][imax - 2]) + (W2*Dx*T_inf2)) / (2 * k + W2*Dx);
 			break;
 		}
 
@@ -688,14 +687,14 @@ void CONDUCTION_2D_UNIFORM_GRID(double T0, double Q_vol_gen, int c1, int c2, int
 		case 1:for (i = 0; i<imax; i++)
 			T[jmax - 1][i] = W3;
 			break;
-		case 2:for (i = 0; i<imax; i++)
+		case 3:for (i = 0; i<imax; i++)
 			T[jmax - 1][i] = (0.5*W3*Dy / k) + T[jmax - 2][i];
 			break;
-		case 3:for (i = 0; i<imax; i++)
+		case 0:for (i = 0; i<imax; i++)
 			T[jmax - 1][i] = T[jmax - 2][i];
 			break;
-		case 4:for (i = 0; i<imax; i++)
-			T[jmax - 1][i] = ((2 * k*T[jmax - 2][i]) + (W3*Dy*T_inf)) / (2 * k + W3*Dy);
+		case 2:for (i = 0; i<imax; i++)
+			T[jmax - 1][i] = ((2 * k*T[jmax - 2][i]) + (W3*Dy*T_inf3)) / (2 * k + W3*Dy);
 			break;
 		}
 
@@ -704,14 +703,14 @@ void CONDUCTION_2D_UNIFORM_GRID(double T0, double Q_vol_gen, int c1, int c2, int
 		case 1:for (i = 0; i<imax; i++)
 			T[0][i] = W4;
 			break;
-		case 2:for (i = 0; i<imax; i++)
+		case 3:for (i = 0; i<imax; i++)
 			T[0][i] = (0.5*W4*Dy / k) + T[1][i];
 			break;
-		case 3:for (i = 0; i<imax; i++)
+		case 0:for (i = 0; i<imax; i++)
 			T[0][i] = T[1][i];
 			break;
-		case 4:for (i = 0; i<imax; i++)
-			T[0][i] = ((2 * k*T[1][i]) + (W4*Dy*T_inf)) / (2 * k + W4*Dy);
+		case 2:for (i = 0; i<imax; i++)
+			T[0][i] = ((2 * k*T[1][i]) + (W4*Dy*T_inf4)) / (2 * k + W4*Dy);
 			break;
 		}
 
@@ -801,7 +800,7 @@ void CONDUCTION_2D_UNIFORM_GRID(double T0, double Q_vol_gen, int c1, int c2, int
 	ZeroMemory(&pi, sizeof(pi));
 	CreateProcess
 	(
-		TEXT("C:\\Users\\Ankush\\Documents\\Visual Studio 2015\\Projects\\Conduction\\Conduction\\MESH.exe"),
+		TEXT("MESH.exe"),
 		NULL, NULL, NULL, FALSE,
 		CREATE_NO_WINDOW,
 		NULL, NULL,
@@ -810,7 +809,7 @@ void CONDUCTION_2D_UNIFORM_GRID(double T0, double Q_vol_gen, int c1, int c2, int
 	);
 	CreateProcess
 	(
-		TEXT("C:\\Users\\Ankush\\Documents\\Visual Studio 2015\\Projects\\Conduction\\Debug\\FilledContours.exe"),
+		TEXT("FilledContours.exe"),
 		TEXT(" data.vtk 20"), NULL, NULL, FALSE,
 		CREATE_NO_WINDOW,
 		NULL, NULL,
@@ -824,7 +823,7 @@ void CONDUCTION_2D_UNIFORM_GRID(double T0, double Q_vol_gen, int c1, int c2, int
 	out2<< max; out2.close();
 	CreateProcess
 	(
-		TEXT("C:\\Users\\Ankush\\Documents\\Visual Studio 2015\\Projects\\Conduction\\Conduction\\LabelContours.exe"),
+		TEXT("LabelContours.exe"),
 		TEXT(" data.vtk 20 "), NULL, NULL, FALSE,
 		CREATE_NO_WINDOW,
 		NULL, NULL,
@@ -834,20 +833,20 @@ void CONDUCTION_2D_UNIFORM_GRID(double T0, double Q_vol_gen, int c1, int c2, int
 	cout << "MAXIMUM TEMPERATURE " << max << endl;
 	cout << "MINIMUM TEMPERATURE " << min << endl;
 	
-	cin >> i;
+	
 }
 
 
 
-void CONDUCTION_2D_NONUNIFORM_GRID(double T0, double Q_vol_gen, int c1, int c2, int c3, int c4, int N1, int N2, double L1, double L2, double W1, double W2, double W3, double W4, double T_inf, double epsilon_st, double Beta)
+void CONDUCTION_2D_NONUNIFORM_GRID(double rho, double cp, double k, double T0, double Q_vol_gen, int c1, int c2, int c3, int c4, int N1, int N2, double L1, double L2, double W1, double W2, double W3, double W4, double T_inf1, double T_inf2, double T_inf3, double T_inf4, double epsilon_st, double Beta)
 {
 
 
 
 	//STEP-1: User-Input
-	double rho = 7750;
-	double cp = 500;
-	double k = 16.2;
+	//double rho = 7750;
+	//double cp = 500;
+	//double k = 16.2;
 	int imax = N1, jmax = N2;
 
 	/*
@@ -1031,14 +1030,14 @@ void CONDUCTION_2D_NONUNIFORM_GRID(double T0, double Q_vol_gen, int c1, int c2, 
 		case 1:for (j = 0; j < jmax; j++)
 			T[j][0] = W1;
 			break;
-		case 2:for (j = 0; j < jmax; j++)
+		case 3:for (j = 0; j < jmax; j++)
 			T[j][0] = (W1*dx[0] / k) + T[j][1];
 			break;
-		case 3:for (j = 0; j < jmax; j++)
+		case 0:for (j = 0; j < jmax; j++)
 			T[j][0] = T[j][1];
 			break;
-		case 4:for (j = 0; j < jmax; j++)
-			T[j][0] = ((k*T[j][1]) + (W1*dx[0] * T_inf)) / (k + W1*dx[0]);
+		case 2:for (j = 0; j < jmax; j++)
+			T[j][0] = ((k*T[j][1]) + (W1*dx[0] * T_inf1)) / (k + W1*dx[0]);
 			break;
 		}
 
@@ -1047,14 +1046,14 @@ void CONDUCTION_2D_NONUNIFORM_GRID(double T0, double Q_vol_gen, int c1, int c2, 
 		case 1:for (j = 0; j < jmax; j++)
 			T[j][imax - 1] = W2;
 			break;
-		case 2:for (j = 0; j < jmax; j++)
+		case 3:for (j = 0; j < jmax; j++)
 			T[j][imax - 1] = (W2*dx[imax - 2] / k) + T[j][imax - 2];
 			break;
-		case 3:for (j = 0; j < jmax; j++)
+		case 0:for (j = 0; j < jmax; j++)
 			T[j][imax - 1] = T[j][imax - 2];
 			break;
-		case 4:for (j = 0; j < jmax; j++)
-			T[j][imax - 1] = ((k*T[j][imax - 2]) + (W2*dx[imax - 2] * T_inf)) / (k + W2*dx[imax - 2]);
+		case 2:for (j = 0; j < jmax; j++)
+			T[j][imax - 1] = ((k*T[j][imax - 2]) + (W2*dx[imax - 2] * T_inf2)) / (k + W2*dx[imax - 2]);
 			break;
 		}
 
@@ -1063,14 +1062,14 @@ void CONDUCTION_2D_NONUNIFORM_GRID(double T0, double Q_vol_gen, int c1, int c2, 
 		case 1:for (i = 0; i < imax; i++)
 			T[jmax - 1][i] = W3;
 			break;
-		case 2:for (i = 0; i < imax; i++)
+		case 3:for (i = 0; i < imax; i++)
 			T[jmax - 1][i] = (W3*dy[jmax - 2] / k) + T[jmax - 2][i];
 			break;
-		case 3:for (i = 0; i < imax; i++)
+		case 0:for (i = 0; i < imax; i++)
 			T[jmax - 1][i] = T[jmax - 2][i];
 			break;
-		case 4:for (i = 0; i < imax; i++)
-			T[jmax - 1][i] = ((k*T[jmax - 2][i]) + (W3*dy[jmax - 2] * T_inf)) / (k + W3*dy[jmax - 2]);
+		case 2:for (i = 0; i < imax; i++)
+			T[jmax - 1][i] = ((k*T[jmax - 2][i]) + (W3*dy[jmax - 2] * T_inf3)) / (k + W3*dy[jmax - 2]);
 			break;
 		}
 
@@ -1079,14 +1078,14 @@ void CONDUCTION_2D_NONUNIFORM_GRID(double T0, double Q_vol_gen, int c1, int c2, 
 		case 1:for (i = 0; i < imax; i++)
 			T[0][i] = W4;
 			break;
-		case 2:for (i = 0; i < imax; i++)
+		case 3:for (i = 0; i < imax; i++)
 			T[0][i] = (W4*dy[0] / k) + T[1][i];
 			break;
-		case 3:for (i = 0; i < imax; i++)
+		case 0:for (i = 0; i < imax; i++)
 			T[0][i] = T[1][i];
 			break;
-		case 4:for (i = 0; i < imax; i++)
-			T[0][i] = ((k*T[1][i]) + (W4*dy[0] * T_inf)) / (k + W4*dy[0]);
+		case 2:for (i = 0; i < imax; i++)
+			T[0][i] = ((k*T[1][i]) + (W4*dy[0] * T_inf4)) / (k + W4*dy[0]);
 			break;
 		}
 
@@ -1120,14 +1119,14 @@ void CONDUCTION_2D_NONUNIFORM_GRID(double T0, double Q_vol_gen, int c1, int c2, 
 			case 1:for (j = 0; j < jmax; j++)
 				T[j][0] = W1;
 				break;
-			case 2:for (j = 0; j < jmax; j++)
+			case 3:for (j = 0; j < jmax; j++)
 				T[j][0] = (W1*dx[0] / k) + T[j][1];
 				break;
-			case 3:for (j = 0; j < jmax; j++)
+			case 0:for (j = 0; j < jmax; j++)
 				T[j][0] = T[j][1];
 				break;
-			case 4:for (j = 0; j < jmax; j++)
-				T[j][0] = ((k*T[j][1]) + (W1*dx[0] * T_inf)) / (k + W1*dx[0]);
+			case 2:for (j = 0; j < jmax; j++)
+				T[j][0] = ((k*T[j][1]) + (W1*dx[0] * T_inf1)) / (k + W1*dx[0]);
 				break;
 			}
 
@@ -1136,14 +1135,14 @@ void CONDUCTION_2D_NONUNIFORM_GRID(double T0, double Q_vol_gen, int c1, int c2, 
 			case 1:for (j = 0; j < jmax; j++)
 				T[j][imax - 1] = W2;
 				break;
-			case 2:for (j = 0; j < jmax; j++)
+			case 3:for (j = 0; j < jmax; j++)
 				T[j][imax - 1] = (W2*dx[imax - 2] / k) + T[j][imax - 2];
 				break;
-			case 3:for (j = 0; j < jmax; j++)
+			case 0:for (j = 0; j < jmax; j++)
 				T[j][imax - 1] = T[j][imax - 2];
 				break;
-			case 4:for (j = 0; j < jmax; j++)
-				T[j][imax - 1] = ((k*T[j][imax - 2]) + (W2*dx[imax - 2] * T_inf)) / (k + W2*dx[imax - 2]);
+			case 2:for (j = 0; j < jmax; j++)
+				T[j][imax - 1] = ((k*T[j][imax - 2]) + (W2*dx[imax - 2] * T_inf2)) / (k + W2*dx[imax - 2]);
 				break;
 			}
 
@@ -1152,14 +1151,14 @@ void CONDUCTION_2D_NONUNIFORM_GRID(double T0, double Q_vol_gen, int c1, int c2, 
 			case 1:for (i = 0; i < imax; i++)
 				T[jmax - 1][i] = W3;
 				break;
-			case 2:for (i = 0; i < imax; i++)
+			case 3:for (i = 0; i < imax; i++)
 				T[jmax - 1][i] = (W3*dy[jmax - 2] / k) + T[jmax - 2][i];
 				break;
-			case 3:for (i = 0; i < imax; i++)
+			case 0:for (i = 0; i < imax; i++)
 				T[jmax - 1][i] = T[jmax - 2][i];
 				break;
-			case 4:for (i = 0; i < imax; i++)
-				T[jmax - 1][i] = ((k*T[jmax - 2][i]) + (W3*dy[jmax - 2] * T_inf)) / (k + W3*dy[jmax - 2]);
+			case 2:for (i = 0; i < imax; i++)
+				T[jmax - 1][i] = ((k*T[jmax - 2][i]) + (W3*dy[jmax - 2] * T_inf3)) / (k + W3*dy[jmax - 2]);
 				break;
 			}
 
@@ -1168,14 +1167,14 @@ void CONDUCTION_2D_NONUNIFORM_GRID(double T0, double Q_vol_gen, int c1, int c2, 
 			case 1:for (i = 0; i < imax; i++)
 				T[0][i] = W4;
 				break;
-			case 2:for (i = 0; i < imax; i++)
+			case 3:for (i = 0; i < imax; i++)
 				T[0][i] = (W4*dy[0] / k) + T[1][i];
 				break;
-			case 3:for (i = 0; i < imax; i++)
+			case 0:for (i = 0; i < imax; i++)
 				T[0][i] = T[1][i];
 				break;
-			case 4:for (i = 0; i < imax; i++)
-				T[0][i] = ((k*T[1][i]) + (W4*dy[0] * T_inf)) / (k + W4*dy[0]);
+			case 2:for (i = 0; i < imax; i++)
+				T[0][i] = ((k*T[1][i]) + (W4*dy[0] * T_inf4)) / (k + W4*dy[0]);
 				break;
 			}
 
@@ -1304,7 +1303,7 @@ void CONDUCTION_2D_NONUNIFORM_GRID(double T0, double Q_vol_gen, int c1, int c2, 
 	ZeroMemory(&pi, sizeof(pi));
 	CreateProcess
 	(
-		TEXT("C:\\Users\\Ankush\\Documents\\Visual Studio 2015\\Projects\\Conduction\\Conduction\\MESH.exe"),
+		TEXT("MESH.exe"),
 		NULL, NULL, NULL, FALSE,
 		CREATE_NO_WINDOW,
 		NULL, NULL,
@@ -1313,7 +1312,7 @@ void CONDUCTION_2D_NONUNIFORM_GRID(double T0, double Q_vol_gen, int c1, int c2, 
 	);
 	CreateProcess
 	(
-		TEXT("C:\\Users\\Ankush\\Documents\\Visual Studio 2015\\Projects\\Conduction\\Debug\\FilledContours.exe"),
+		TEXT("FilledContours.exe"),
 		TEXT(" data.vtk 20"), NULL, NULL, FALSE,
 		CREATE_NO_WINDOW,
 		NULL, NULL,
@@ -1327,7 +1326,7 @@ void CONDUCTION_2D_NONUNIFORM_GRID(double T0, double Q_vol_gen, int c1, int c2, 
 	out2 << max; out2.close();
 	CreateProcess
 	(
-		TEXT("C:\\Users\\Ankush\\Documents\\Visual Studio 2015\\Projects\\Conduction\\Conduction\\LabelContours.exe"),
+		TEXT("LabelContours.exe"),
 		TEXT(" data.vtk 20 "), NULL, NULL, FALSE,
 		CREATE_NO_WINDOW,
 		NULL, NULL,
@@ -1337,16 +1336,351 @@ void CONDUCTION_2D_NONUNIFORM_GRID(double T0, double Q_vol_gen, int c1, int c2, 
 	cout << "MAXIMUM TEMPERATURE " << max << endl;
 	cout << "MINIMUM TEMPERATURE " << min << endl; 
 	
-	cin >> i;
+	
 	
 }
 
 int main()
 
 {
-	//CONDUCTION_2D_NONUNIFORM_GRID(30, 50000, 1, 2, 4, 3, 12, 12, 1, 1, 100, 10000, 100, 0, 30, 0.0001, 1.2);
-	//CONDUCTION_2D_UNIFORM_GRID(30, 50, 1, 1, 1, 1, 12, 12, 1, 1, 100, 300, 400, 200, 0, 0.0001);
+	/*CONDUCTION_2D_NONUNIFORM_GRID(30, 50000, 1, 2, 4, 3, 12, 12, 1, 1, 100, 10000, 100, 0, 30, 0.0001, 1.2);
+	CONDUCTION_2D_UNIFORM_GRID(30, 50, 1, 1, 1, 1, 12, 12, 1, 1, 100, 300, 400, 200, 0, 0.0001);
 	CONDUCTION_1D_NONUNIFORM_GRID(30, 50, 1, 4, 0, 0, 12, 0.01, 0, 1000, 0, 0, 100, 0.0001, 1.2);
-	//CONDUCTION_1D_UNIFORM_GRID(30, 50000, 1, 1, 0, 0, 12, 0.01, 0, 100, 0, 0, 0,0.0001);
+	CONDUCTION_1D_UNIFORM_GRID(30, 50000, 1, 1, 0, 0, 12, 0.01, 0, 100, 0, 0, 0,0.0001);
+	long i = 0;
+	for (i = 0; i < 1000000000; i++);
+	remove("m.txt");
+	remove("mesh.txt");
+	remove("output.txt");
+	remove("data.vtk");
+	int no;
+	cin >> no;
+	*/
+
+	//double T0, double Q_vol_gen, int c1, int c2, int c3, int c4, int N1, int N2, double L1, double L2, double W1, double W2, double W3, double W4, double T_inf, double epsilon_st, double Beta, double rho; double cP, double k;
+	int material;
+	double Q_vol_gen; 
+	double Beta, conv_crit, Length1, Length2, Initial_temp;
+	double rho, cP, k, temp1, temp2, tempinfinity1, tempinfinity2, convec_coefficient1, convec_coefficient2, Heatflux_coefficient1, Heatflux_coefficient2;
+	int c1 = 0, num_div, bc1, bc2, bc3, bc4, is_one_d;
+	ifstream in;
+	//std::ifstream input("C:\\Users\\Raju\\Documents\\Visual Studio 2015\\Projects\\Finalconduction\\Finalconduction\\User_Input.txt");
+	in.open("User_Input.txt");
+
+	in >> is_one_d;      //checks if 1d or 2d.If value 1 then 1d
+	in >> material;
+	in >> num_div;
+	in >> Beta;           //Beta -1 means uniform
+
+
+
+	if (material == 0)    //check which material ann assign values
+	{
+		rho = 2712;
+		cP = 910;
+		k = 205;
+
+	}
+	else if (material == 1)
+	{
+		rho = 8950;
+		cP = 390;
+		k = 385;
+	}
+	else if (material == 2)
+	{
+		rho = 7750;
+		cP = 500;
+		k = 16.2;
+
+
+	}
+
+
+	if (is_one_d == 1 && Beta == -1)   //conditions to check 4 types of cases
+
+	{
+
+		in >> bc1;
+		in >> bc2;
+		in >> conv_crit;
+
+		in >> Q_vol_gen;
+		in >> Length1;
+		in >> Initial_temp;
+
+		ifstream inx;
+		//std::ifstream input("C:\\Users\\Raju\\Documents\\Visual Studio 2015\\Projects\\Finalconduction\\Finalconduction\\User_Input2.txt");
+
+		inx.open("User_Input2.txt");
+		int temp3, temp4, tempinfinity3, tempinfinity4, convec_coefficient3, convec_coefficient4, Heatflux_coefficient3, Heatflux_coefficient4;
+		inx >> temp1;
+		inx >> temp2;
+		inx >> tempinfinity1;
+		inx >> tempinfinity2;
+
+		inx >> convec_coefficient1;
+		inx >> convec_coefficient2;
+		
+
+		inx >> Heatflux_coefficient1;
+		inx >> Heatflux_coefficient2;
+		
+		double a, b;
+		if (temp1 != -1)
+			a = temp1;
+		else if (convec_coefficient1 != -1)
+			a = convec_coefficient1;
+		else if (Heatflux_coefficient1 != -1)
+			a = Heatflux_coefficient1;
+		else a = 0;
+		if (temp2 != -1)
+			b = temp2;
+		else if (convec_coefficient2 != -1)
+			b = convec_coefficient2;
+		else if (Heatflux_coefficient2 != -1)
+			b = Heatflux_coefficient2;
+		else b = 0;
+		
+		CONDUCTION_1D_UNIFORM_GRID(rho,cP,k, Initial_temp,Q_vol_gen, bc1, bc2, 0, 0, num_div, Length1 , a, b, 0, 0, tempinfinity1, tempinfinity2, conv_crit);
+
+	}
+	else if (is_one_d == 1 && Beta != -1)
+	{
+
+		in >> bc1;
+		in >> bc2;
+		
+
+		in >> conv_crit;
+
+		in >> Q_vol_gen;
+		in >> Length1;
+		
+
+		in >> Initial_temp;
+
+		ifstream inx;
+		//std::ifstream input("C:\\Users\\Raju\\Documents\\Visual Studio 2015\\Projects\\Finalconduction\\Finalconduction\\User_Input2.txt");
+
+		inx.open("User_Input2.txt");
+		int temp3, temp4, tempinfinity3, tempinfinity4, convec_coefficient3, convec_coefficient4, Heatflux_coefficient3, Heatflux_coefficient4;
+		inx >> temp1;
+		inx >> temp2;
+		
+		inx >> tempinfinity1;
+		inx >> tempinfinity2;
+		
+
+		inx >> convec_coefficient1;
+		inx >> convec_coefficient2;
+		
+
+		inx >> Heatflux_coefficient1;
+		inx >> Heatflux_coefficient2;
+
+		double a, b;
+		if (temp1 != -1)
+			a = temp1;
+		else if (convec_coefficient1 != -1)
+			a = convec_coefficient1;
+		else if (Heatflux_coefficient1 != -1)
+			a = Heatflux_coefficient1;
+		else a = 0;
+		if (temp2 != -1)
+			b = temp2;
+		else if (convec_coefficient2 != -1)
+			b = convec_coefficient2;
+		else if (Heatflux_coefficient2 != -1)
+			b = Heatflux_coefficient2;
+		else b = 0;
+		cout << a << " " << b<<" "<<convec_coefficient2;
+		
+		
+
+		
+		CONDUCTION_1D_NONUNIFORM_GRID(rho, cP, k, Initial_temp, Q_vol_gen, bc1, bc2, 0, 0, num_div, Length1, a, b, 0, 0, tempinfinity1, tempinfinity2, conv_crit ,Beta);
+
+
+
+	}
+
+
+	else if (is_one_d == -1 && Beta == -1)
+	{
+
+		in >> bc1;
+		in >> bc2;
+		in >> bc3;
+
+		in >> bc4;
+		in >> conv_crit;
+
+		in >> Q_vol_gen;
+		in >> Length1;
+		in >> Length2;
+
+		in >> Initial_temp;
+
+
+		ifstream inx;
+		std::ifstream input("C:\\Users\\Raju\\Documents\\Visual Studio 2015\\Projects\\Finalconduction\\Finalconduction\\User_Input2.txt");
+
+		inx.open("User_Input2.txt");
+		int temp3, temp4, tempinfinity3, tempinfinity4, convec_coefficient3, convec_coefficient4, Heatflux_coefficient3, Heatflux_coefficient4;
+		inx >> temp1;
+		inx >> temp2;
+		inx >> temp3;
+		inx >> temp4;
+
+		inx >> tempinfinity1;
+		inx >> tempinfinity2;
+		inx >> tempinfinity3;
+
+		inx >> tempinfinity4;
+
+
+
+		inx >> convec_coefficient1;
+		inx >> convec_coefficient2;
+		inx >> convec_coefficient3;       // In 2d Unsed variables are initialised to -1 in the old file from wher these are being read
+		inx >> convec_coefficient4;       // whereas in 1d unsed variables like bc3,bc4 are initialised to 0 as they were not present in the older file
+
+		inx >> Heatflux_coefficient1;
+		inx >> Heatflux_coefficient2;
+		inx >> Heatflux_coefficient3;
+		inx >> Heatflux_coefficient4;
+
+		double a, b, c,d;
+		if (temp1 != -1)
+			a = temp1;
+		else if (convec_coefficient1 != -1)
+			a = convec_coefficient1;
+		else if (Heatflux_coefficient1 != -1)
+			a = Heatflux_coefficient1;
+		else a = 0;
+		if (temp2 != -1)
+			b = temp2;
+		else if (convec_coefficient2 != -1)
+			b = convec_coefficient2;
+		else if (Heatflux_coefficient2 != -1)
+			b = Heatflux_coefficient2;
+		else b = 0;
+		
+		if (temp3 != -1)
+			c = temp3;
+		else if (convec_coefficient3 != -1)
+			c = convec_coefficient3;
+		else if (Heatflux_coefficient3 != -1)
+			c = Heatflux_coefficient3;
+		else c = 0;
+		if (temp4 != -1)
+			d = temp4;
+		else if (convec_coefficient4 != -1)
+			d = convec_coefficient4;
+		else if (Heatflux_coefficient4 != -1)
+			d = Heatflux_coefficient4;
+		else d = 0;
+
+
+		CONDUCTION_2D_UNIFORM_GRID(rho, cP, k, Initial_temp, Q_vol_gen, bc1, bc2, bc3, bc4, num_div,num_div, Length1,Length2, a, b, c, d, tempinfinity1, tempinfinity2, tempinfinity3, tempinfinity4, conv_crit);
+
+
+
+	}
+
+	else if (is_one_d == -1 && Beta != -1)
+	{
+
+
+		in >> bc1;
+		in >> bc2;
+		in >> bc3;
+
+		in >> bc4;
+		in >> conv_crit;
+
+		in >> Q_vol_gen;
+		in >> Length1;
+		in >> Length2;
+
+		in >> Initial_temp;
+
+
+		ifstream inx;
+		//std::ifstream input("C:\\Users\\Raju\\Documents\\Visual Studio 2015\\Projects\\Finalconduction\\Finalconduction\\User_Input2.txt");
+
+		inx.open("User_Input2.txt");
+		int temp3, temp4, tempinfinity3, tempinfinity4, convec_coefficient3, convec_coefficient4, Heatflux_coefficient3, Heatflux_coefficient4;
+		inx >> temp1;
+		inx >> temp2;
+		inx >> temp3;
+		inx >> temp4;
+
+		inx >> tempinfinity1;
+		inx >> tempinfinity2;
+		inx >> tempinfinity3;
+
+		inx >> tempinfinity4;
+
+
+
+		inx >> convec_coefficient1;
+		inx >> convec_coefficient2;
+		inx >> convec_coefficient3;       // In 2d Unsed variables are initialised to -1 in the old file from wher these are being read
+		inx >> convec_coefficient4;       // whereas in 1d unsed variables like bc3,bc4 are initialised to 0 as they were not present in the older file
+
+		inx >> Heatflux_coefficient1;
+		inx >> Heatflux_coefficient2;
+		inx >> Heatflux_coefficient3;
+		inx >> Heatflux_coefficient4;
+		double a, b, c, d;
+		if (temp1 != -1)
+			a = temp1;
+		else if (convec_coefficient1 != -1)
+			a = convec_coefficient1;
+		else if (Heatflux_coefficient1 != -1)
+			a = Heatflux_coefficient1;
+		else a = 0;
+		if (temp2 != -1)
+			b = temp2;
+		else if (convec_coefficient2 != -1)
+			b = convec_coefficient2;
+		else if (Heatflux_coefficient2 != -1)
+			b = Heatflux_coefficient2;
+		else b = 0;
+
+		if (temp3 != -1)
+			c = temp3;
+		else if (convec_coefficient3 != -1)
+			c = convec_coefficient3;
+		else if (Heatflux_coefficient3 != -1)
+			c = Heatflux_coefficient3;
+		else c = 0;
+		if (temp4 != -1)
+			d = temp4;
+		else if (convec_coefficient4 != -1)
+			d = convec_coefficient4;
+		else if (Heatflux_coefficient4 != -1)
+			d = Heatflux_coefficient4;
+		else d = 0;
+
+
+		CONDUCTION_2D_NONUNIFORM_GRID(rho, cP, k, Initial_temp, Q_vol_gen, bc1, bc2, bc3, bc4, num_div, num_div, Length1, Length2, a, b, c, d, tempinfinity1, tempinfinity2, tempinfinity3, tempinfinity4, conv_crit,Beta);
+
+		//CONDUCTION_2D_NONUNIFORM_GRID(30, 50000, 1, 2, 4, 3, 12, 12, 1, 1, 100, 10000, 100, 0, 30, 0.0001, 1.2);
+
+
+	}
+
+	system("pause");  //to pause the terminal window
+	remove("m.txt");
+	remove("mesh.txt");
+	remove("output.txt");
+	remove("data.vtk");
+	remove("User_Input.txt");
+	remove("User_Input2.txt");
+	
+
 	return 1;
 }
