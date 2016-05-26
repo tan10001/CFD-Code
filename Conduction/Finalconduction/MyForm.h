@@ -358,8 +358,8 @@ namespace Finalconduction {
 	private: System::Void button1_Click(System::Object^  sender, System::EventArgs^  e) {
 
 
-	//	if (material_index == -1 && number_division == -1 && bc1 == -1 && bc2 == -1 && convergence_criterion == -1 && heat_per_volume == -1 && Length == -1 && Initial_temp == -1)
-	//	{
+		if (material_index != -1 && number_division != -1 && bc1 != -1 && bc2 != -1 && convergence_criterion != -1 && heat_per_volume != -1 && Length != -1 && Initial_temp != -1)
+		{
 			ofstream outfile;
 			//outfile.open("User_Input.txt", ios::trunc | ios::out);//delete at end
 			outfile.open("User_Input.txt", ios::trunc | ios::out);
@@ -386,7 +386,6 @@ namespace Finalconduction {
 
 
 
-
 			outfile.close();
 
 
@@ -401,11 +400,11 @@ namespace Finalconduction {
 			MyForm2^ f2 = gcnew MyForm2();
 			f2->ShowDialog();
 
-		//}
-	//	else
-	//	{
-	//		MessageBox::Show("Please enter all the inputs");
-	//	}
+		}
+	else
+		{
+			MessageBox::Show("Please enter all the inputs");
+		}
 
 
 
@@ -455,7 +454,7 @@ namespace Finalconduction {
 		else
 		{
 			isnonuniform = 1;
-			nonuniform_coefficient = Int32::Parse(textBox4->Text);
+			nonuniform_coefficient = Double::Parse(textBox4->Text);
 
 
 		}

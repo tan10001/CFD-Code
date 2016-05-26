@@ -9,7 +9,6 @@ namespace Finalconduction {
 	using namespace System::Data;
 	using namespace System::Drawing;
 	using namespace std;
-	using namespace System::Diagnostics;
 
 	/// <summary>
 	/// Summary for Conduction_Inputs
@@ -18,7 +17,7 @@ namespace Finalconduction {
 	{
 	public:	public: double beta = -1, converge = -1, heatpervol = -1, heatflux_1 = -1, heatflux_2 = -1, heatflux_3 = -1, heatflux_4 = -1, convec_coefficient_1 = -1, convec_coefficient_2 = -1, convec_coefficient_3 = -1, convec_coefficient_4 = -1, temp1 = -1, temp2 = -1, temp3 = -1, temp4 = -1, Tempinfinty_1 = -1, Tempinfinty_2 = -1, Tempinfinty_3 = -1, Tempinfinty_4 = -1, Length1 = -1, Length2 = -1, Initial_temp = -1;
 	public:int count1 = 0, count2 = 0, is_one_d = 0;
-	public:int material = -1, no_of_divisions = -1, bc1 = -1, bc2 = -1, bc3 = -1, bc4 = -1;
+	public:int material = -1, no_of_divisions_x = -1, no_of_divisions_y = -1,bc1 = -1, bc2 = -1, bc3 = -1, bc4 = -1;
 		   Conduction_Inputs(void)
 		   {
 
@@ -33,7 +32,9 @@ namespace Finalconduction {
 			   in >> n;
 			   material = n;
 			   in >> n;
-			   no_of_divisions = n;
+			   no_of_divisions_x = n;
+			   in >> n;
+			   no_of_divisions_y = n;
 			   in >> d;
 			   beta = d;
 			   in >> n;
@@ -962,12 +963,15 @@ namespace Finalconduction {
 		outfile << heatflux_3 << '\n';
 		outfile << heatflux_4 << '\n';
 
-
 		Process::Start("Conduction.exe");
+
+
 
 		outfile.close();
 
+
 		Application::Exit();
+
 	}
 	private: System::Void textBox1_KeyPress(System::Object^  sender, System::Windows::Forms::KeyPressEventArgs^  e) {
 
@@ -1180,4 +1184,5 @@ namespace Finalconduction {
 		}
 	}
 	};
+	
 }
