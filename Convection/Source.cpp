@@ -1,5 +1,3 @@
-
-
 #include <iostream>
 #include <fstream>
 #include <math.h>
@@ -662,6 +660,11 @@ void advection_2d_nonuniform(double Beta) //all parameters later passed through 
 					w_plus2y = Dy[i + 1] * (2 * Dy[i] + Dy[i - 1]) / ((Dy[i] + Dy[i + 1])*(Dy[i + 1] + Dy[i - 1]));
 					w_minus2y = Dy[i] * (2 * Dy[i + 1] + Dy[i + 2]) / ((Dy[i] + Dy[i + 1])*(Dy[i] + Dy[i + 2]));
 
+                                        w_plus3y = -Dy[j] * Dy[j + 1] / ((Dy[j] + Dy[j - 1])*(Dy[j] + 2 * Dy[j + 1] + Dy[j - 1]));
+					w_minus3y = -Dy[j] * Dy[j + 1] / ((Dy[j+1] + Dy[j + 2])*(Dy[j] + 2 * Dy[j + 1] + Dy[j + 2]));
+
+
+
 
 
 
@@ -774,6 +777,3 @@ int main()
 	return 0;
 
 }
-convection code.txt
-Open with
-Displaying convection code.txt.
