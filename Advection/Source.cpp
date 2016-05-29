@@ -12,7 +12,7 @@
 #include <string.h>
 #include <algorithm>
 
-	using namespace std;
+using namespace std;
 
 void advection_2d_uniform_all_schemes()  //change w1,w2,w3 for diff schemes
 {
@@ -28,10 +28,10 @@ void advection_2d_uniform_all_schemes()  //change w1,w2,w3 for diff schemes
 	double epsilon_st = 0.08;
 	double mx = rho*u; double my = rho*v;
 
-										 //double L1 = 1, L2 = 1;
-	double T0 = 300;
-	double W1 = 273, W2 = 274; double W3 = 275, W4 = 276;//input temps of walls
-	double w1, w2, w3; // coeff in advection scheme
+	//double L1 = 1, L2 = 1;
+	double T0 = 50;
+	double W1 = 100, W2 = 0; double W3 = 100, W4 = 0;//input temps of walls
+	double w1=0, w2=1, w3=0; // coeff in advection scheme
 
 
 					   /*
@@ -70,10 +70,10 @@ void advection_2d_uniform_all_schemes()  //change w1,w2,w3 for diff schemes
 		T[0][i] = W2;
 
 	for (j = 0; j < jmax; j++) // east side
-	T[j][imax -1] = W3;
+		T[j][imax - 1] = W3;
 
 	for (i = 0; i < imax; i++)  //north side
-		T[jmax -1][i] = W4;
+		T[jmax - 1][i] = W4;
 
 
 
@@ -147,6 +147,13 @@ void advection_2d_uniform_all_schemes()  //change w1,w2,w3 for diff schemes
 	{
 
 		n = n + 1;
+		for (j = 0; j < jmax; j++) // loop to update old temps
+		{
+			for (i = 0; i < imax; i++)
+			{
+				T_old[j][i] = T[j][i];
+			}
+		}
 
 
 
@@ -202,40 +209,33 @@ void advection_2d_uniform_all_schemes()  //change w1,w2,w3 for diff schemes
 
 
 
-		for (j = 0; j < jmax; j++) // loop to update old temps
-		{
-			for (i = 0; i < imax; i++)
-			{
-				T_old[j][i] = T[j][i];
-			}
-		}
+		
 
 
-		*double z = 0;
+		
 		// finding rms for stability criterion
 
-       /*
+		/*
 		for (int i = 1; i < imax - 1; i++)
 		{
-			for (int j = 1; j < jmax - 1; j++)
-			{
-				z = z + (T[j][i] - T_old[j][i])*(T[j][i] - T_old[j][i]); // summing up T minus T-old and squaring
+		for (int j = 1; j < jmax - 1; j++)
+		{
+		z = z + (T[j][i] - T_old[j][i])*(T[j][i] - T_old[j][i]); // summing up T minus T-old and squaring
 
-			}
 		}
-	       unsteadiness_nd = sqrt(z / ((imax - 2)*(jmax - 2)));//steady state stability criterion
-*/
-		double min = T[0][0], max = T[0][0];
-
+		}
+		unsteadiness_nd = sqrt(z / ((imax - 2)*(jmax - 2)));//steady state stability criterion
+		*/
+		double max = 0;
 		for (j = 0; j < jmax; j++)
 		{
 			for (i = 0; i < imax; i++)
 			{
-				cout << T[j][i] << " ";
-				if (T[j][i] > max)
-					max = T[j][i];
-				if (T[j][i] < min)
-					min = T[j][i];
+				double diff = abs(T_old[j][i] - T[j][i]);
+				if (diff > max)
+					max = diff;
+				cout << T[j][i]<<" ";
+
 			}
 			cout << endl;
 		}
@@ -243,6 +243,7 @@ void advection_2d_uniform_all_schemes()  //change w1,w2,w3 for diff schemes
 		printf("Time step no. %2d, Unsteadiness = %8.5e\n", n, unsteadiness_nd);															//printf("Time step no. %2d, Unsteadiness = %8.5e\n", n, unsteadiness);
 
 	}
+	cin >> i;
 }
 
 
@@ -253,32 +254,32 @@ void advection_2d_nonuniform(double Beta) //all parameters later passed through 
 	double rho = 7750;
 	double cp = 500;
 	//double k = 16.2;
-	int imax = 10, jmax = 10;
-	double L1 = 100, L2 = 110;
+	int imax = 12, jmax = 12;
+	double L1 = 1, L2 = 1;
 	double epsilon_st = 0.008;
-	double u = 1, v = 2;
-	double T0 = 293;
-	double W3, W4;
+	double u = 1, v = 1;
+	double T0 = 0;
+	
 	double mx = rho*u;
 	double my = rho*v;
-	double W1 = 343, W2 = 345; // input boundary conditions
+	double W1 = 100, W2 = 0; double W3 = 100, W4 = 0;//input temps of walls
 	double w_plus1x, w_plus2x, w_plus3x, w_minus1x, w_minus2x, w_minus3x;
 	double w_plus1y, w_plus2y, w_plus3y, w_minus1y, w_minus2y, w_minus3y;
-	int which_scheme = 1;// tells the scheme to be used
+	int which_scheme = 0;// tells the scheme to be used
 
 
 
 
 
-				   /*
-				   1=west
-				   2=east
-				   3=north
-				   4=south
-				   */
+						 /*
+						 1=west
+						 2=east
+						 3=north
+						 4=south
+						 */
 
-				   //STEP-2: Geometrical Parameter and Stability criterion based time-step
-				   //double alpha = k / (rho*cp);
+						 //STEP-2: Geometrical Parameter and Stability criterion based time-step
+						 //double alpha = k / (rho*cp);
 
 	int i = 0, j = 0;
 	double *xi = new double[imax - 1];
@@ -503,7 +504,7 @@ void advection_2d_nonuniform(double Beta) //all parameters later passed through 
 
 		for (i = 1; i < imax - 2; i++)
 		{
-			for (j = 1; j < jmax - 1; j++)
+			for (j = 0; j < jmax - 1; j++)
 			{
 				// to use diff values of w for diff schemes
 
@@ -511,7 +512,7 @@ void advection_2d_nonuniform(double Beta) //all parameters later passed through 
 				{
 					w_plus1x = w_plus3x = w_minus1x = w_minus3x = 0;
 					w_plus1y = w_plus3y = w_minus1y = w_minus3y = 0;
-					w_plus2x = w_plus2y = 1; // check if both plus and minus are same sign(mostly yes)
+					w_plus2x = w_minus2x = 1; // check if both plus and minus are same sign(mostly yes)
 					w_plus2y = w_minus2y = 1;
 
 
@@ -557,11 +558,11 @@ void advection_2d_nonuniform(double Beta) //all parameters later passed through 
 				}
 				else  //CD scheme
 				{
-				    w_plus1x = Dx[i-1]/(Dx[i-1]+Dx[i+1]);
-				    w_plus2x = Dx[i+1]/(Dx[i-1]+ Dx[i+1]);
-				    w_plus3x = w_minus3x = 0;
-				    w_minus1x = w_plus2x;
-				    w_minus2x = w_plus1s;
+					w_plus1x = Dx[i - 1] / (Dx[i - 1] + Dx[i + 1]);
+					w_plus2x = Dx[i + 1] / (Dx[i - 1] + Dx[i + 1]);
+					w_plus3x = w_minus3x = 0;
+					w_minus1x = w_plus2x;
+					w_minus2x = w_plus1x;
 
 
 
@@ -575,7 +576,7 @@ void advection_2d_nonuniform(double Beta) //all parameters later passed through 
 			}
 		}
 
-		for (i = 1; i < imax - 1; i++)
+		for (i = 0; i < imax - 1; i++)
 		{
 			for (j = 1; j < jmax - 2; j++)
 			{
@@ -585,7 +586,7 @@ void advection_2d_nonuniform(double Beta) //all parameters later passed through 
 				{
 					w_plus1x = w_plus3x = w_minus1x = w_minus3x = 0;
 					w_plus1y = w_plus3y = w_minus1y = w_minus3y = 0;
-					w_plus2x = w_plus2y = 1; // check if both plus and minus are same sign(mostly yes)
+					w_plus2x = w_minus2x = 1; // check if both plus and minus are same sign(mostly yes)
 					w_plus2y = w_minus2y = 1;
 
 
@@ -624,8 +625,8 @@ void advection_2d_nonuniform(double Beta) //all parameters later passed through 
 					w_minus1y = Dy[j + 1] * (2 * Dy[j + 1] + Dy[i + 2]) / ((Dy[i] + Dy[i + 1])*(Dy[i] + 2 * Dy[j + 1] + Dy[j + 2]));
 					w_plus2y = Dy[j + 1] * (2 * Dy[j] + Dy[j - 1]) / ((Dy[j] + Dy[j + 1])*(Dy[i + 1] + Dy[j - 1]));
 					w_minus2y = Dy[j] * (2 * Dy[j + 1] + Dy[j + 2]) / ((Dy[j] + Dy[j + 1])*(Dy[j] + Dy[j + 2]));
-					w_plus3y = -(Dy[j]*Dy[j+1])/((Dy[j] + Dy[j-1])*(Dy[j]+ 2*Dy[j+1] + Dy[j-1]));
-					w_minus3y = -(Dy[j]*Dy[j+1])/((Dy[j+1]+ Dy[j+2])*(Dy[j] + 2*Dy[j+1] + Dy[j+2]));
+					w_plus3y = -(Dy[j] * Dy[j + 1]) / ((Dy[j] + Dy[j - 1])*(Dy[j] + 2 * Dy[j + 1] + Dy[j - 1]));
+					w_minus3y = -(Dy[j] * Dy[j + 1]) / ((Dy[j + 1] + Dy[j + 2])*(Dy[j] + 2 * Dy[j + 1] + Dy[j + 2]));
 
 
 
@@ -633,16 +634,16 @@ void advection_2d_nonuniform(double Beta) //all parameters later passed through 
 				}
 				else  //CD scheme
 				{
-				      w_plus1x = Dx[i-1]/(Dx[i-1]+Dx[i+1]);
-				    w_plus2x = Dx[i+1]/(Dx[i-1]+ Dx[i+1]);
-				    w_plus3x = w_minus3x = 0;
-				    w_minus1x = w_plus2x;
-				    w_minus2x = w_plus1s;
-				    w_plus1y =  Dy[j-1]/(Dy[j-1]+Dy[j+1]);
-				    w_plus2y =  Dy[j+1]/(Dy[j-1]+ Dy[j+1]);
-				    w_plus3y = w_minus3y = 0;
-				    w_minus1y = w_plus1y;
-				    w_minus2y = w_plus2y;
+					w_plus1x = Dx[i - 1] / (Dx[i - 1] + Dx[i + 1]);
+					w_plus2x = Dx[i + 1] / (Dx[i - 1] + Dx[i + 1]);
+					w_plus3x = w_minus3x = 0;
+					w_minus1x = w_plus2x;
+					w_minus2x = w_plus1x;
+					w_plus1y = Dy[j - 1] / (Dy[j - 1] + Dy[j + 1]);
+					w_plus2y = Dy[j + 1] / (Dy[j - 1] + Dy[j + 1]);
+					w_plus3y = w_minus3y = 0;
+					w_minus1y = w_plus1y;
+					w_minus2y = w_plus2y;
 
 
 
@@ -688,9 +689,9 @@ void advection_2d_nonuniform(double Beta) //all parameters later passed through 
 			// present iterative value stored as old one
 
 
-			for (i = 0; i < imax - 1; i++)
+			for (i = 1; i < imax - 1; i++)
 			{
-				for (j = 0; j < jmax - 1; j++)
+				for (j = 1; j < jmax - 1; j++)
 				{
 					T[j][i] = aE[j][i] * T[j][i] + (aE[j][i - 1] + mx*Dy[j])*T[j][i - 1] + aN[j][i] * T[j + 1][i] + (aN[j - 1][i] + my*Dx[i])*T[j - 1][i] + b[j][i];
 					T[j][i] /= aP[j][i];
@@ -720,9 +721,20 @@ void advection_2d_nonuniform(double Beta) //all parameters later passed through 
 			}
 		}
 		unsteadiness_nd = max; // parameter to check convergence
-
+		printf("Time step no. %5d, Unsteadiness) = %8.4e\n", n, unsteadiness_nd);
+		for (j = 0; j < jmax; j++)
+		{
+			for (i = 0; i < imax; i++)
+			{
+				cout << T[j][i] << " ";
+				
+			}
+			cout << endl;
+		}
+		
+		cin >> i;
 	}
-
+	cin >> i;
 }
 
 
@@ -731,11 +743,8 @@ int main()
 
 {
 
-	advection_2d_uniform_all_schemes();
+	//advection_2d_uniform_all_schemes();
 	advection_2d_nonuniform(1.2);
 	return 0;
 
 }
-advection.cpp
-Open with
-Displaying advection.cpp.
