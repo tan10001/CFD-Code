@@ -1362,14 +1362,15 @@ int main()
 	double Q_vol_gen; 
 	double Beta, conv_crit, Length1, Length2, Initial_temp;
 	double rho, cP, k, temp1, temp2, tempinfinity1, tempinfinity2, convec_coefficient1, convec_coefficient2, Heatflux_coefficient1, Heatflux_coefficient2;
-	int c1 = 0, num_div, bc1, bc2, bc3, bc4, is_one_d;
+	int c1 = 0, num_div,num_div2, bc1, bc2, bc3, bc4, is_one_d;
 	ifstream in;
-	//std::ifstream input("C:\\Users\\Raju\\Documents\\Visual Studio 2015\\Projects\\Finalconduction\\Finalconduction\\User_Input.txt");
+	
 	in.open("User_Input.txt");
 
 	in >> is_one_d;      //checks if 1d or 2d.If value 1 then 1d
 	in >> material;
 	in >> num_div;
+	in >> num_div2;
 	in >> Beta;           //Beta -1 means uniform
 
 
@@ -1410,7 +1411,7 @@ int main()
 		in >> Initial_temp;
 
 		ifstream inx;
-		//std::ifstream input("C:\\Users\\Raju\\Documents\\Visual Studio 2015\\Projects\\Finalconduction\\Finalconduction\\User_Input2.txt");
+		
 
 		inx.open("User_Input2.txt");
 		int temp3, temp4, tempinfinity3, tempinfinity4, convec_coefficient3, convec_coefficient4, Heatflux_coefficient3, Heatflux_coefficient4;
@@ -1461,7 +1462,7 @@ int main()
 		in >> Initial_temp;
 
 		ifstream inx;
-		//std::ifstream input("C:\\Users\\Raju\\Documents\\Visual Studio 2015\\Projects\\Finalconduction\\Finalconduction\\User_Input2.txt");
+		
 
 		inx.open("User_Input2.txt");
 		int temp3, temp4, tempinfinity3, tempinfinity4, convec_coefficient3, convec_coefficient4, Heatflux_coefficient3, Heatflux_coefficient4;
@@ -1524,7 +1525,7 @@ int main()
 
 
 		ifstream inx;
-		std::ifstream input("C:\\Users\\Raju\\Documents\\Visual Studio 2015\\Projects\\Finalconduction\\Finalconduction\\User_Input2.txt");
+		
 
 		inx.open("User_Input2.txt");
 		int temp3, temp4, tempinfinity3, tempinfinity4, convec_coefficient3, convec_coefficient4, Heatflux_coefficient3, Heatflux_coefficient4;
@@ -1583,7 +1584,7 @@ int main()
 		else d = 0;
 
 
-		CONDUCTION_2D_UNIFORM_GRID(rho, cP, k, Initial_temp, Q_vol_gen, bc1, bc2, bc3, bc4, num_div,num_div, Length1,Length2, a, b, c, d, tempinfinity1, tempinfinity2, tempinfinity3, tempinfinity4, conv_crit);
+		CONDUCTION_2D_UNIFORM_GRID(rho, cP, k, Initial_temp, Q_vol_gen, bc1, bc2, bc3, bc4, num_div,num_div2, Length1,Length2, a, b, c, d, tempinfinity1, tempinfinity2, tempinfinity3, tempinfinity4, conv_crit);
 
 
 
@@ -1666,7 +1667,7 @@ int main()
 		else d = 0;
 
 
-		CONDUCTION_2D_NONUNIFORM_GRID(rho, cP, k, Initial_temp, Q_vol_gen, bc1, bc2, bc3, bc4, num_div, num_div, Length1, Length2, a, b, c, d, tempinfinity1, tempinfinity2, tempinfinity3, tempinfinity4, conv_crit,Beta);
+		CONDUCTION_2D_NONUNIFORM_GRID(rho, cP, k, Initial_temp, Q_vol_gen, bc1, bc2, bc3, bc4, num_div, num_div2, Length1, Length2, a, b, c, d, tempinfinity1, tempinfinity2, tempinfinity3, tempinfinity4, conv_crit,Beta);
 
 		//CONDUCTION_2D_NONUNIFORM_GRID(30, 50000, 1, 2, 4, 3, 12, 12, 1, 1, 100, 10000, 100, 0, 30, 0.0001, 1.2);
 
